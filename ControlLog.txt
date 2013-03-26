@@ -1,0 +1,9 @@
+<------------------------------------------------------------------------------------->
+Debug时间　　：2012年10月30日 16:42:08
+Debug类名　　：home 操作人:洁浩
+Debug方法名　：itemSubmitBtn_click
+Debug错误信息：System.FormatException: 该字符串未被识别为有效的 DateTime。
+   在 System.DateTimeParse.Parse(String s, DateTimeFormatInfo dtfi, DateTimeStyles styles)
+   在 System.Convert.ToDateTime(String value)
+   在 home.itemSubmitBtn_click(Object sender, EventArgs e) 位置 f:\OA\home.aspx.cs:行号 256
+<------------------------------------------------------------------------------------->

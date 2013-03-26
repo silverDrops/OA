@@ -1,0 +1,50 @@
+@charset "utf-8";
+#main {..............................................................}
+#main { overflow:hidden; width:940px; min-height:480px; margin:10px auto 40px; }
+#main h1 { background:#6fb109;  border-top-left-radius:3px; border-top-right-radius:3px; -moz-border-top-left-radius:3px; -moz-border-top-right-radius:3px;  -webkit-border-top-left-radius:3px; -webkit-border-top-right-radius:3px; line-height:35px; font-family:微软雅黑; font-size:16px; color:#fefefe; text-indent:1em;}
+
+#left_side{............................................................}
+#left_side { float:left; width:15%; min-height:400px; background:#f3f3f3;  border-bottom-left-radius:5px; -moz-border-bottom-left-radius:5px;  -webkit-border-bottom-left-radius:5px; }
+#member { margin:10px 10px;}
+#member input{border:none; background:#f3f3f3;width:100px; color:#333333;cursor:pointer;font:14px 微软雅黑;float:right;}
+#member li{ display:inline-block; cursor:pointer; font:14px 微软雅黑; color:#333333; }
+#member li span {float:left; width:20px; height:20px; background:url('../images/onclick01.png') no-repeat; background-position:3px -18px;} 
+#member ul {display:none; float:left; width:100%;}
+#member ul li { font-family:宋体; margin-left:25px; line-height:1.4em; cursor:auto;display:block;}
+#member ul li a{width:auto; color:#333333;}
+#member ul li span { float:none; background:none; margin-left:15px; font-size:80%;}
+
+#right_side{...........................................................}
+#right_side{ float:left; width:85%; min-height:400px; background:#fafafa; border-bottom-right-radius:5px; -moz-border-bottom-right-radius:5px;  -webkit-border-bottom-right-radius:5px; }
+#right_side h4 { width:90%; margin-top:25px; margin-left:25px; font-size:16px; color:#333333;}
+#right_side h4 #bigSpan{float:right; }
+#right_side h4 span{font:12px 宋体; line-height:25px;}
+#right_side h4  input { margin:0 8px 0 8px; color:#8dcf27; background:#fafafa;border:none;height:18px; cursor:pointer;}
+#right_side #pager{margin-right:55px;}
+#right_side #pager a{color:#999999;}
+#right_side #pager .currentPageBtn{font-weight: bold; font-size: 13px;border:none; color:#7EC215}
+#information { width:90%; height:65%; margin:0 0 20px 18px; padding:16px 0; border-top: solid 2px #545454; border-bottom: solid 2px #545454; text-align:center;}
+#information tr td { width:12%; height:28px;}
+#information tr th { font-size:15px;}
+#information tr td a { color:#8dcf27;}
+#information tr td input{ border:none;background:transparent;text-align:center;width:100px;height:20px;padding-left:0px;}
+#information tr td input:hover{border:1px solid #999999;}
+#right_side #save {position:relative; top:0px;margin:0 auto 20px; display:block;}
+
+#edit {.........................................................}
+#edit {display:none; z-index:100; position:absolute; left:0; right:0; width:100%; height:100%; background: rgba(26,26,26,0.3);}
+#editPerson {.........................................................}
+#editPerson {display:none; z-index:100; position:absolute; left:0; right:0; width:100%; height:100%; background: rgba(26,26,26,0.3);}
+#editPerson ul li span{color:Red;visibility:hidden;}
+#create { width:40%; margin: 160px auto; background:#f3f3f3;  border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+#create h1 { background:#6fb109;  border-top-left-radius:3px; border-top-right-radius:3px; -moz-border-top-left-radius:3px; -moz-border-top-right-radius:3px;  -webkit-border-top-left-radius:3px; -webkit-border-top-right-radius:3px; line-height:35px; font-family:微软雅黑; font-size:16px; color:#fefefe; text-indent:1em;}
+#create h1 img { float:right; margin-right:5px; cursor:pointer;}
+#create ul {width:70%; margin:auto;}
+#create li { height:35px; margin-top:20px;}
+#create .finishLi{height:53px;}
+#create label { float:left; width:100px; margin-right:20px; text-align:right; font:14px 黑体; line-height:25px;}
+#create input { height:25px; width:150px; border-left: solid 2px #A0A0A0; border-top:solid 2px #A0A0A0; line-height:25px;}
+#create select{height:25px; width:150px; border-left: solid 2px #A0A0A0; border-top:solid 2px #A0A0A0; line-height:25px;border-bottom:none;border-right:none;}
+#create .ShortNumIn{width:43px;}
+#create .LongNumIn{width:87px;}
+#create  .submit { float:left; width:auto; height:auto; border:none; margin-left:40%;} 

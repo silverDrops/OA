@@ -1,0 +1,14 @@
+@charset "utf-8";
+#header { width:940px; height:150px; margin:0 auto; padding-top:10px; background:url(../images/header.png) no-repeat; }
+#header #out{float:right;}
+#header #out img{margin-right:5px;margin-top:5px;}
+#header #Header1_OutButton{ float:right; border:none; background:#fff;}
+#header input:hover{cursor:pointer;}
+#header span{ font-family:Arial;}
+#header a.home_page { float:right; width:550px; height:80px; margin-right:164px;}
+#header #menu_block { width:940px; height:25px; background:#333; margin-top:88px;}
+#header .menu { float:right; margin-right:15px;}
+#header .menu li { display:inline; line-height:2em;}
+#header .menu li   { font-family:微软雅黑; font-size:1.1em; font-weight:bolder; color:#e6e6e6;}
+#header .menu li a { color:#e6e6e6;}
+.clear { clear:both;}

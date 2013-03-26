@@ -7,67 +7,67 @@ using System.Collections;
 using System.Data.SqlClient;
 
     /// <summary>
-    /// Êı¾İ¿âµÄÍ¨ÓÃ·ÃÎÊ´úÂë
-    /// ´ËÀàÎª³éÏóÀà£¬²»ÔÊĞíÊµÀı»¯£¬ÔÚÓ¦ÓÃÊ±Ö±½Óµ÷ÓÃ¼´¿É
+    /// æ•°æ®åº“çš„é€šç”¨è®¿é—®ä»£ç 
+    /// æ­¤ç±»ä¸ºæŠ½è±¡ç±»ï¼Œä¸å…è®¸å®ä¾‹åŒ–ï¼Œåœ¨åº”ç”¨æ—¶ç›´æ¥è°ƒç”¨å³å¯
     /// </summary>
     public abstract class SqlHelper
     {
-        //»ñÈ¡Êı¾İ¿âÁ¬½Ó×Ö·û´®£¬ÆäÊôÓÚ¾²Ì¬±äÁ¿ÇÒÖ»¶Á£¬ÏîÄ¿ÖĞËùÓĞÎÄµµ¿ÉÒÔÖ±½ÓÊ¹ÓÃ£¬µ«²»ÄÜĞŞ¸Ä
-        //±àºÅ13
+        //è·å–æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²ï¼Œå…¶å±äºé™æ€å˜é‡ä¸”åªè¯»ï¼Œé¡¹ç›®ä¸­æ‰€æœ‰æ–‡æ¡£å¯ä»¥ç›´æ¥ä½¿ç”¨ï¼Œä½†ä¸èƒ½ä¿®æ”¹
+        //ç¼–å·13
         public static readonly string ConnString =
         ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        // ¹şÏ£±íÓÃÀ´´æ´¢»º´æµÄ²ÎÊıĞÅÏ¢£¬¹şÏ£±í¿ÉÒÔ´æ´¢ÈÎÒâÀàĞÍµÄ²ÎÊı
-        //±àºÅ8
-        private static Hashtable parmCache = Hashtable.Synchronized(new Hashtable());//±àºÅ9
+        // å“ˆå¸Œè¡¨ç”¨æ¥å­˜å‚¨ç¼“å­˜çš„å‚æ•°ä¿¡æ¯ï¼Œå“ˆå¸Œè¡¨å¯ä»¥å­˜å‚¨ä»»æ„ç±»å‹çš„å‚æ•°
+        //ç¼–å·8
+        private static Hashtable parmCache = Hashtable.Synchronized(new Hashtable());//ç¼–å·9
 
         /// <summary>
-        ///Ö´ĞĞÒ»¸ö²»ĞèÒª·µ»ØÖµµÄSqlCommandÃüÁî£¬Í¨¹ıÖ¸¶¨×¨ÓÃµÄÁ¬½Ó×Ö·û´®¡£
-        /// Ê¹ÓÃ²ÎÊıÊı×éĞÎÊ½Ìá¹©²ÎÊıÁĞ±í 
+        ///æ‰§è¡Œä¸€ä¸ªä¸éœ€è¦è¿”å›å€¼çš„SqlCommandå‘½ä»¤ï¼Œé€šè¿‡æŒ‡å®šä¸“ç”¨çš„è¿æ¥å­—ç¬¦ä¸²ã€‚
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„å½¢å¼æä¾›å‚æ•°åˆ—è¡¨ 
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š
         ///  int result = ExecuteNonQuery(connString, CommandType.StoredProcedure,
         ///  "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="connectionString">Ò»¸öÓĞĞ§µÄÊı¾İ¿âÁ¬½Ó×Ö·û´®</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="connectionString">ä¸€ä¸ªæœ‰æ•ˆçš„æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸öÊıÖµ±íÊ¾´ËSqlCommandÃüÁîÖ´ĞĞºóÓ°ÏìµÄĞĞÊı</returns>
+        /// <returns>è¿”å›ä¸€ä¸ªæ•°å€¼è¡¨ç¤ºæ­¤SqlCommandå‘½ä»¤æ‰§è¡Œåå½±å“çš„è¡Œæ•°</returns>
         public static int ExecuteNonQuery(string connectionString, CommandType cmdType,
         string cmdText, params SqlParameter[] commandParameters)
         {
             SqlCommand cmd = new SqlCommand();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                //Í¨¹ıPrePareCommand·½·¨½«²ÎÊıÖğ¸ö¼ÓÈëµ½SqlCommandµÄ²ÎÊı¼¯ºÏÖĞ
+                //é€šè¿‡PrePareCommandæ–¹æ³•å°†å‚æ•°é€ä¸ªåŠ å…¥åˆ°SqlCommandçš„å‚æ•°é›†åˆä¸­
                 PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
                 int val = cmd.ExecuteNonQuery();
-                //Çå¿ÕSqlCommandÖĞµÄ²ÎÊıÁĞ±í
+                //æ¸…ç©ºSqlCommandä¸­çš„å‚æ•°åˆ—è¡¨
                 cmd.Parameters.Clear();
                 return val;
             }
         }
         /// <summary>
-        ///Ö´ĞĞÒ»Ìõ²»·µ»Ø½á¹ûµÄSqlCommand£¬Í¨¹ıÒ»¸öÒÑ¾­´æÔÚµÄÊı¾İ¿âÁ¬½Ó 
-        /// Ê¹ÓÃ²ÎÊıÊı×éÌá¹©²ÎÊı
+        ///æ‰§è¡Œä¸€æ¡ä¸è¿”å›ç»“æœçš„SqlCommandï¼Œé€šè¿‡ä¸€ä¸ªå·²ç»å­˜åœ¨çš„æ•°æ®åº“è¿æ¥ 
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„æä¾›å‚æ•°
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º  
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š  
         /// int result = ExecuteNonQuery(conn, CommandType.StoredProcedure, 
         /// "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="conn">Ò»¸öÏÖÓĞµÄÊı¾İ¿âÁ¬½Ó</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="conn">ä¸€ä¸ªç°æœ‰çš„æ•°æ®åº“è¿æ¥</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸öÊıÖµ±íÊ¾´ËSqlCommandÃüÁîÖ´ĞĞºóÓ°ÏìµÄĞĞÊı</returns>
+        /// <returns>è¿”å›ä¸€ä¸ªæ•°å€¼è¡¨ç¤ºæ­¤SqlCommandå‘½ä»¤æ‰§è¡Œåå½±å“çš„è¡Œæ•°</returns>
 
-        //±àºÅ5
+        //ç¼–å·5
         public static int ExecuteNonQuery(SqlConnection connection, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
 
@@ -79,23 +79,23 @@ using System.Data.SqlClient;
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»Ìõ²»·µ»Ø½á¹ûµÄSqlCommand£¬Í¨¹ıÒ»¸öÒÑ¾­´æÔÚµÄÊı¾İ¿âÊÂÎï´¦Àí 
-        /// Ê¹ÓÃ²ÎÊıÊı×éÌá¹©²ÎÊı
+        /// æ‰§è¡Œä¸€æ¡ä¸è¿”å›ç»“æœçš„SqlCommandï¼Œé€šè¿‡ä¸€ä¸ªå·²ç»å­˜åœ¨çš„æ•°æ®åº“äº‹ç‰©å¤„ç† 
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„æä¾›å‚æ•°
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º 
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š 
         ///  int result = ExecuteNonQuery(trans, CommandType.StoredProcedure, 
         /// "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="trans">Ò»¸ö´æÔÚµÄ sql ÊÂÎï´¦Àí</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="trans">ä¸€ä¸ªå­˜åœ¨çš„ sql äº‹ç‰©å¤„ç†</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸öÊıÖµ±íÊ¾´ËSqlCommandÃüÁîÖ´ĞĞºóÓ°ÏìµÄĞĞÊı</returns>
+        /// <returns>è¿”å›ä¸€ä¸ªæ•°å€¼è¡¨ç¤ºæ­¤SqlCommandå‘½ä»¤æ‰§è¡Œåå½±å“çš„è¡Œæ•°</returns>
 
-        //±àºÅ12
+        //ç¼–å·12
         public static int ExecuteNonQuery(SqlTransaction trans, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
 
@@ -107,30 +107,30 @@ using System.Data.SqlClient;
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»Ìõ·µ»Ø½á¹û¼¯µÄSqlCommandÃüÁî£¬Í¨¹ı×¨ÓÃµÄÁ¬½Ó×Ö·û´®¡£
-        /// Ê¹ÓÃ²ÎÊıÊı×éÌá¹©²ÎÊı
+        /// æ‰§è¡Œä¸€æ¡è¿”å›ç»“æœé›†çš„SqlCommandå‘½ä»¤ï¼Œé€šè¿‡ä¸“ç”¨çš„è¿æ¥å­—ç¬¦ä¸²ã€‚
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„æä¾›å‚æ•°
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º  
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š  
         ///  SqlDataReader r = ExecuteReader(connString, CommandType.StoredProcedure, 
         /// "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="connectionString">Ò»¸öÓĞĞ§µÄÊı¾İ¿âÁ¬½Ó×Ö·û´®</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="connectionString">ä¸€ä¸ªæœ‰æ•ˆçš„æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸ö°üº¬½á¹ûµÄSqlDataReader</returns>
+        /// <returns>è¿”å›ä¸€ä¸ªåŒ…å«ç»“æœçš„SqlDataReader</returns>
 
         public static SqlDataReader ExecuteReader(string connectionString, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
 
             SqlCommand cmd = new SqlCommand();
             SqlConnection conn = new SqlConnection(connectionString);
-            // ÔÚÕâÀïÊ¹ÓÃtry/catch´¦ÀíÊÇÒòÎªÈç¹û·½·¨³öÏÖÒì³££¬ÔòSqlDataReader¾Í²»´æÔÚ£¬
-            //CommandBehavior.CloseConnectionµÄÓï¾ä¾Í²»»áÖ´ĞĞ£¬´¥·¢µÄÒì³£ÓÉcatch²¶»ñ¡£
-            //¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬²¢Í¨¹ıthrowÔÙ´ÎÒı·¢²¶×½µ½µÄÒì³£¡£  
+            // åœ¨è¿™é‡Œä½¿ç”¨try/catchå¤„ç†æ˜¯å› ä¸ºå¦‚æœæ–¹æ³•å‡ºç°å¼‚å¸¸ï¼Œåˆ™SqlDataReaderå°±ä¸å­˜åœ¨ï¼Œ
+            //CommandBehavior.CloseConnectionçš„è¯­å¥å°±ä¸ä¼šæ‰§è¡Œï¼Œè§¦å‘çš„å¼‚å¸¸ç”±catchæ•è·ã€‚
+            //å…³é—­æ•°æ®åº“è¿æ¥ï¼Œå¹¶é€šè¿‡throwå†æ¬¡å¼•å‘æ•æ‰åˆ°çš„å¼‚å¸¸ã€‚  
             try
             {
                 PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
@@ -142,18 +142,18 @@ using System.Data.SqlClient;
             {
                 conn.Close();
                 return null;
-                throw;  //±àºÅ7
+                throw;  //ç¼–å·7
             }
         }
         
         /// <summary>
-        /// ·µ»ØDataSetÊı¾İ¼¯
+        /// è¿”å›DataSetæ•°æ®é›†
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="cmdType"></param>
         /// <param name="cmdText"></param>
         /// <param name="commandParameters"></param>
-        /// <returns>·µ»ØDataSetÊı¾İ¼¯</returns>
+        /// <returns>è¿”å›DataSetæ•°æ®é›†</returns>
         public static DataSet ExecuteDataset(string connectionString, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
             SqlCommand cmd = new SqlCommand();
@@ -214,21 +214,21 @@ using System.Data.SqlClient;
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»Ìõ·µ»ØµÚÒ»Ìõ¼ÇÂ¼µÚÒ»ÁĞµÄSqlCommandÃüÁî£¬Í¨¹ı×¨ÓÃµÄÁ¬½Ó×Ö·û´®¡£ 
-        /// Ê¹ÓÃ²ÎÊıÊı×éÌá¹©²ÎÊı
+        /// æ‰§è¡Œä¸€æ¡è¿”å›ç¬¬ä¸€æ¡è®°å½•ç¬¬ä¸€åˆ—çš„SqlCommandå‘½ä»¤ï¼Œé€šè¿‡ä¸“ç”¨çš„è¿æ¥å­—ç¬¦ä¸²ã€‚ 
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„æä¾›å‚æ•°
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º  
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š  
         ///  Object obj = ExecuteScalar(connString, CommandType.StoredProcedure, 
         /// "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="connectionString">Ò»¸öÓĞĞ§µÄÊı¾İ¿âÁ¬½Ó×Ö·û´®</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="connectionString">ä¸€ä¸ªæœ‰æ•ˆçš„æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸öobjectÀàĞÍµÄÊı¾İ£¬¿ÉÒÔÍ¨¹ı Convert.To{Type}·½·¨×ª»»ÀàĞÍ</returns>
+        /// <returns>è¿”å›ä¸€ä¸ªobjectç±»å‹çš„æ•°æ®ï¼Œå¯ä»¥é€šè¿‡ Convert.To{Type}æ–¹æ³•è½¬æ¢ç±»å‹</returns>
         public static object ExecuteScalar(string connectionString, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
 
@@ -244,21 +244,21 @@ using System.Data.SqlClient;
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»Ìõ·µ»ØµÚÒ»Ìõ¼ÇÂ¼µÚÒ»ÁĞµÄSqlCommandÃüÁî£¬Í¨¹ıÒÑ¾­´æÔÚµÄÊı¾İ¿âÁ¬½Ó¡£
-        /// Ê¹ÓÃ²ÎÊıÊı×éÌá¹©²ÎÊı
+        /// æ‰§è¡Œä¸€æ¡è¿”å›ç¬¬ä¸€æ¡è®°å½•ç¬¬ä¸€åˆ—çš„SqlCommandå‘½ä»¤ï¼Œé€šè¿‡å·²ç»å­˜åœ¨çš„æ•°æ®åº“è¿æ¥ã€‚
+        /// ä½¿ç”¨å‚æ•°æ•°ç»„æä¾›å‚æ•°
         /// </summary>
         /// <remarks>
-        /// Ê¹ÓÃÊ¾Àı£º 
+        /// ä½¿ç”¨ç¤ºä¾‹ï¼š 
         ///  Object obj = ExecuteScalar(connString, CommandType.StoredProcedure,
         /// "PublishOrders", new SqlParameter("@prodid", 24));
         /// </remarks>
-        /// <param name="conn">Ò»¸öÒÑ¾­´æÔÚµÄÊı¾İ¿âÁ¬½Ó</param>
-        /// <param name="commandType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬ T-SQLÓï¾ä£¬ µÈµÈ¡£) 
+        /// <param name="conn">ä¸€ä¸ªå·²ç»å­˜åœ¨çš„æ•°æ®åº“è¿æ¥</param>
+        /// <param name="commandType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼Œ T-SQLè¯­å¥ï¼Œ ç­‰ç­‰ã€‚) 
         /// </param>
-        /// <param name="commandText">´æ´¢¹ı³ÌµÄÃû×Ö»òÕß T-SQL Óï¾ä</param>
-        /// <param name="commandParameters">ÒÔÊı×éĞÎÊ½Ìá¹©SqlCommandÃüÁîÖĞÓÃµ½µÄ²ÎÊıÁĞ±í
+        /// <param name="commandText">å­˜å‚¨è¿‡ç¨‹çš„åå­—æˆ–è€… T-SQL è¯­å¥</param>
+        /// <param name="commandParameters">ä»¥æ•°ç»„å½¢å¼æä¾›SqlCommandå‘½ä»¤ä¸­ç”¨åˆ°çš„å‚æ•°åˆ—è¡¨
         /// </param>
-        /// <returns>·µ»ØÒ»¸öobjectÀàĞÍµÄÊı¾İ£¬¿ÉÒÔÍ¨¹ı Convert.To{Type}·½·¨×ª»»ÀàĞÍ
+        /// <returns>è¿”å›ä¸€ä¸ªobjectç±»å‹çš„æ•°æ®ï¼Œå¯ä»¥é€šè¿‡ Convert.To{Type}æ–¹æ³•è½¬æ¢ç±»å‹
         /// </returns>
         public static object ExecuteScalar(SqlConnection connection, CommandType cmdType, string cmdText, params SqlParameter[] commandParameters)
         {
@@ -271,24 +271,24 @@ using System.Data.SqlClient;
         }
 
         /// <summary>
-        /// »º´æ²ÎÊıÊı×é
+        /// ç¼“å­˜å‚æ•°æ•°ç»„
         /// </summary>
-        /// <param name="cacheKey">²ÎÊı»º´æµÄ¼üÖµ</param>
-        /// <param name="cmdParms">±»»º´æµÄ²ÎÊıÁĞ±í</param>
+        /// <param name="cacheKey">å‚æ•°ç¼“å­˜çš„é”®å€¼</param>
+        /// <param name="cmdParms">è¢«ç¼“å­˜çš„å‚æ•°åˆ—è¡¨</param>
 
         public static void CacheParameters(string cacheKey, params SqlParameter[] commandParameters)
         {
 
-            //±àºÅ10
+            //ç¼–å·10
             parmCache[cacheKey] = commandParameters;
 
         }
 
         /// <summary>
-        /// »ñÈ¡±»»º´æµÄ²ÎÊı
+        /// è·å–è¢«ç¼“å­˜çš„å‚æ•°
         /// </summary>
-        /// <param name="cacheKey">ÓÃÓÚ²éÕÒ²ÎÊıµÄKEYÖµ</param>
-        /// <returns>·µ»Ø»º´æµÄ²ÎÊıÊı×é</returns>
+        /// <param name="cacheKey">ç”¨äºæŸ¥æ‰¾å‚æ•°çš„KEYå€¼</param>
+        /// <returns>è¿”å›ç¼“å­˜çš„å‚æ•°æ•°ç»„</returns>
 
         public static SqlParameter[] GetCachedParameters(string cacheKey)
         {
@@ -296,38 +296,38 @@ using System.Data.SqlClient;
             SqlParameter[] cachedParms = (SqlParameter[])parmCache[cacheKey];
             if (cachedParms == null)
                 return null;
-            //ĞÂ½¨Ò»¸ö²ÎÊıµÄ¿ËÂ¡ÁĞ±í
+            //æ–°å»ºä¸€ä¸ªå‚æ•°çš„å…‹éš†åˆ—è¡¨
             SqlParameter[] clonedParms = new SqlParameter[cachedParms.Length];
-            //Í¨¹ıÑ­»·Îª¿ËÂ¡²ÎÊıÁĞ±í¸³Öµ
+            //é€šè¿‡å¾ªç¯ä¸ºå…‹éš†å‚æ•°åˆ—è¡¨èµ‹å€¼
             for (int i = 0, j = cachedParms.Length; i < j; i++)
-                //Ê¹ÓÃclone·½·¨¸´ÖÆ²ÎÊıÁĞ±íÖĞµÄ²ÎÊı
-                //±àºÅ11
+                //ä½¿ç”¨cloneæ–¹æ³•å¤åˆ¶å‚æ•°åˆ—è¡¨ä¸­çš„å‚æ•°
+                //ç¼–å·11
                 clonedParms[i] = (SqlParameter)((ICloneable)cachedParms[i]).Clone();
             return clonedParms;
         }
 
         /// <summary>
-        /// ÎªÖ´ĞĞÃüÁî×¼±¸²ÎÊı
+        /// ä¸ºæ‰§è¡Œå‘½ä»¤å‡†å¤‡å‚æ•°
         /// </summary>
-        /// <param name="cmd">SqlCommand ÃüÁî</param>
-        /// <param name="conn">ÒÑ¾­´æÔÚµÄÊı¾İ¿âÁ¬½Ó</param>
-        /// <param name="trans">Êı¾İ¿âÊÂÎï´¦Àí</param>
-        /// <param name="cmdType">SqlCommandÃüÁîÀàĞÍ (´æ´¢¹ı³Ì£¬T-SQLÓï¾ä£¬µÈµÈ¡£) </param>
-        /// <param name="cmdText">Command text£¬T-SQLÓï¾ä ÀıÈç Select * from 
+        /// <param name="cmd">SqlCommand å‘½ä»¤</param>
+        /// <param name="conn">å·²ç»å­˜åœ¨çš„æ•°æ®åº“è¿æ¥</param>
+        /// <param name="trans">æ•°æ®åº“äº‹ç‰©å¤„ç†</param>
+        /// <param name="cmdType">SqlCommandå‘½ä»¤ç±»å‹ (å­˜å‚¨è¿‡ç¨‹ï¼ŒT-SQLè¯­å¥ï¼Œç­‰ç­‰ã€‚) </param>
+        /// <param name="cmdText">Command textï¼ŒT-SQLè¯­å¥ ä¾‹å¦‚ Select * from 
         /// Products</param>
-        /// <param name="cmdParms">·µ»Ø´ø²ÎÊıµÄÃüÁî</param>
+        /// <param name="cmdParms">è¿”å›å¸¦å‚æ•°çš„å‘½ä»¤</param>
 
-        //±àºÅ6
+        //ç¼–å·6
         private static void PrepareCommand(SqlCommand cmd, SqlConnection conn, SqlTransaction trans, CommandType cmdType, string cmdText, SqlParameter[]
              cmdParms)
         {
 
-            //ÅĞ¶ÏÊı¾İ¿âÁ¬½Ó×´Ì¬
+            //åˆ¤æ–­æ•°æ®åº“è¿æ¥çŠ¶æ€
             if (conn.State != ConnectionState.Open)
                 conn.Open();
             cmd.Connection = conn;
             cmd.CommandText = cmdText;
-            //ÅĞ¶ÏÊÇ·ñĞèÒªÊÂÎï´¦Àí
+            //åˆ¤æ–­æ˜¯å¦éœ€è¦äº‹ç‰©å¤„ç†
             if (trans != null)
                 cmd.Transaction = trans;
             cmd.CommandType = cmdType;

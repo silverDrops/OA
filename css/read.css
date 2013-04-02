@@ -43,3 +43,4 @@ div.message span.message_date {float:right; margin-right:40px;}
 #message_contant button { float:right; cursor:pointer; margin-right:18px; border:none; text-decoration:underline; color:#6eae0c;}
 #message_contant #message_alert { float:left; color:red;}
 .currentPageBtn{font-weight: bold; font-size: 13px;border:none; color:#7EC215;}
+#commentPager{margin-top:5px;}

@@ -63,7 +63,7 @@
             		</div>
            <webdiyer:aspnetpager ID="commentPager" runat="server"  HorizontalAlign="Right"  AlwaysShowFirstLastPageNumber="true" NumericButtonType="Text" 
                      MoreButtonType="Text" PageSize="4" AlwaysShow="true"  PagingButtonType="Image" ButtonImageNameExtension="n" OnPageChanged="OnPageChanged"  
-            CurrentPageButtonClass="currentPageBtn"  width="100%" ImagePath="../OA/images/"  ButtonImageExtension=".png" DisabledButtonImageNameExtension="D" >
+            CurrentPageButtonClass="currentPageBtn"  width="100%" ImagePath="~/images/"  ButtonImageExtension=".png" DisabledButtonImageNameExtension="D" >
                 </webdiyer:aspnetpager>
             </ContentTemplate>
             </asp:UpdatePanel>

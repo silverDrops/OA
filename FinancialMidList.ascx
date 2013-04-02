@@ -21,6 +21,6 @@
               	<ul id="change" runat="server" class="change"><!--分页工具，ButtonNameExtension是无效时的按钮图片名称最后的字 如firstD.png的D -->
                 <webdiyer:AspNetPager ID="financeAspNetPager" runat="server" AlwaysShowFirstLastPageNumber="true" NumericButtonType="Text"
                      MoreButtonType="Text" PageSize="10" AlwaysShow="true" PagingButtonType="Image" ButtonImageNameExtension="n" DisabledButtonImageNameExtension="D"
-                  OnPageChanged="OnPageChanged"  CurrentPageButtonClass="currentPageBtn"  width="100%" ImagePath="../OA/images/" ButtonImageExtension=".png" >
+                  OnPageChanged="OnPageChanged"  CurrentPageButtonClass="currentPageBtn"  width="100%" ImagePath="~/images/" ButtonImageExtension=".png" >
                 </webdiyer:AspNetPager>
 			</ul>
